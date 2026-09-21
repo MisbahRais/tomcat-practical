@@ -29,11 +29,18 @@ pipeline {
         }
 
         stage('Verify WAR') {
-            steps {
-                echo 'Checking generated WAR file...'
-                bat 'dir "%WAR_FILE%"'
+    steps {
+        echo 'Checking generated WAR file...'
+
+        script {
+            if (fileExists('target/tomcat-demo.war')) {
+                echo 'WAR FILE FOUND SUCCESSFULLY'
+            } else {
+                error 'WAR FILE NOT FOUND in target folder'
             }
         }
+    }
+}
 
         stage('Deploy to Tomcat') {
             steps {
